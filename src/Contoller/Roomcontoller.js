@@ -14,13 +14,14 @@ const createRoom = (req,res)=>{
             EndTime:"",
         };
         Rooms.push(roomData);
-        res.status(200).send({message:"ROom created successfully", Rooms})
+        res.status(200).send({message:"Room created successfully", Rooms})
     }
     catch(error){
         res.status(500).send({message:"Internal server error"});
     }
 }
 
-export default {
+
+module.exports = {
     createRoom
 }
