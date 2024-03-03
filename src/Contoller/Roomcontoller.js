@@ -117,7 +117,7 @@ const BookRoom = (req, res) => {
             return booking.CustomerName == Customername
         }
         );
-            return count + CustomerBooking.length; 
+            return CustomerBooking.length; 
       }, 0);
   
       res.status(200).send({
