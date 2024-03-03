@@ -7,6 +7,6 @@ router.post("/bookRoom",BookRoom)
 router.get("/",getRooms)
 router.get("/bookedrooms",getBookedrooms)
 router.get("/customers",getCustomersbookings)
-router.get("/bookingcount/:CustomerName",getBookingCount)
+router.get("/bookingcount/:Customername",getBookingCount)
 
 module.exports = router;

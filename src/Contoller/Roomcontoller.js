@@ -27,7 +27,8 @@ const getRooms = (req, res) => {
     try {
       if (Rooms.length) {
         res.status(200).send({ message: "Rooms Data Fetched", Rooms });
-      } else res.status().send({ message: "NO Rooms are Created" });
+      }
+      else res.status().send({ message: "NO Rooms are Created" });
     } 
     catch (error) {
       res.status(500).send({ message: "Internal Server Error" });
@@ -48,9 +49,17 @@ const BookRoom = (req, res) => {
           roomToBook.Date = req.body.Date;
           roomToBook.StartTime = req.body.StartTime;
           roomToBook.EndTime = req.body.EndTime;
+
+          CustomerBookings.push({
+            CustomerName: req.body.CustomerName,
+            RoomId: req.body.RoomId,
+            Date: req.body.Date,
+            StartTime: req.body.StartTime,
+            EndTime: req.body.EndTime,
+          });
   
   
-          res.status(200).send({ message: "Room Booked Successfully!!"});
+          res.status(200).send({ message: "Room Booked Successfully!"});
         } else {
           res.status(400).send({ message: `Room ${roomIdToBook} is already booked` });
         }
@@ -86,17 +95,6 @@ const BookRoom = (req, res) => {
   
   const getCustomersbookings = (req, res) => {
     try {
-      Rooms.map((e) => {
-        if (e.status == "Occupied") {
-          CustomerBookings.push({
-            CustomerName: e.CustomerName,
-            RoomId: e.RoomId,
-            Date: e.Date,
-            StartTime: e.StartTime,
-            EndTime: e.EndTime,
-          });
-        }
-      });
       res
         .status(200)
         .send({ message: "Booked Customers Data Fetched", CustomerBookings });
@@ -104,31 +102,32 @@ const BookRoom = (req, res) => {
       res.status(500).send({ message: "Internal server error" });
     }
   };
-  
+  let CustomerBooking = [];
   const getBookingCount = (req, res) => {
     try {
-      const CustomerName  = req.params.CustomerName;
-      if (!CustomerName) {
+      const Customername  = req.params.Customername;
+      console.log(Customername)
+      if (!Customername) {
         return res
           .status(400)
           .send({ message: "CustomerName parameter is missing" });
       }
-      const bookingCount = Rooms.reduce((count, room) => {
-        const customerBookings = room.CustomerBookings.filter(
-          (booking) => booking.CustomerName === CustomerName
+      const bookingCount = CustomerBookings.reduce((count) => {
+          CustomerBooking = CustomerBookings.filter((booking) => {
+            return booking.CustomerName == Customername
+        }
         );
-        return count + customerBookings.length;
+            return count + CustomerBooking.length; 
       }, 0);
   
       res.status(200).send({
-        message: `Booking count for ${CustomerName}: ${bookingCount}`,
+        message: `Booking count for ${Customername}: ${bookingCount}`,
         bookingCount: bookingCount,
-        CustomerBookings:CustomerBookings
+        CustomerBookings:CustomerBooking
       });
-    } catch (error) {
-      res
-        .status(500)
-        .send({ message: "Internal Server Error", error: error.message });
+    } 
+    catch (error) {
+      res.status(500).send({ message: "Internal Server Error", error: error.message });
     }
   };
   
